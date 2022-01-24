@@ -10,15 +10,22 @@ public class CaracterControler : MonoBehaviour
     private bool canJump = true;
     private float timeBetweenJumps = 1;
     private float lastJumped;
+
+    private MoveLines moveLines;
+    private Rigidbody rigidbody;
+
     // Start is called before the first frame update
     void Start()
     {
         lastJumped = Time.time;
+        moveLines = GetComponent<MoveLines>();
+        rigidbody = GetComponent<Rigidbody>();
     }
 
     public void SetActive()
     {
         isActive = true;
+        moveLines.SetActive();
     }
 
     public void SetInactive()
@@ -32,10 +39,9 @@ public class CaracterControler : MonoBehaviour
         if (isActive) {
             if (Input.GetKeyDown(KeyCode.Space) && canJump)
             {
-                Debug.Log("caeasd");
                 canJump = false;
                 lastJumped = Time.time;
-                this.GetComponent<Rigidbody>().velocity += Vector3.up * force;
+                rigidbody.velocity += Vector3.up * force;
             }
 
             if (Time.time - lastJumped > timeBetweenJumps)
