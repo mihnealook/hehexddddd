@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class CaracterControler : MonoBehaviour
 {
+
+    public float COINS_WORTH_POINTS = 1000;
+
+    public GameManager gameManager;
+
     public float force;
 
     private bool isActive = false;
@@ -24,6 +29,21 @@ public class CaracterControler : MonoBehaviour
     public void SetInactive()
     {
         isActive = false;
+    }
+
+    public bool isCowActive()
+    {
+        return this.isActive;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Coin")
+        {
+            this.gameManager.updateScore(COINS_WORTH_POINTS, gameManager.getMultiplier());
+            other.gameObject.SetActive(false);
+            Destroy(other.gameObject);
+        }
     }
 
     // Update is called once per frame
