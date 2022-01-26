@@ -69,12 +69,10 @@ public class MoveLines : MonoBehaviour
         if (transitionTime <= 0.5f)
         {
             currentRotation *= Quaternion.Euler(new Vector3(0.0f, 0.0f, transitionTime * direction * RotationAngle));
-            Debug.Log("First rotation");
         }
         else
         {
             currentRotation *= Quaternion.Euler(new Vector3(0.0f, 0.0f, (transitionTime - 0.5f) * -1 * direction * RotationAngle));
-            Debug.Log("Second rotation");
         }
         rigidbody.rotation = currentRotation;
 
