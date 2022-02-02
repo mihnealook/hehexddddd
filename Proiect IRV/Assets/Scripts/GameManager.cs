@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
     string SCORE_TEXT = "Score: ";
     public TextMeshProUGUI scoreTextMesh;
 
+    public TextMeshProUGUI PowerUpDoublePointsText;
+
     // Actual score is a float to accurately keep track of the score.
     private float actualScore;
 
@@ -105,12 +107,11 @@ public class GameManager : MonoBehaviour
         return this.scoreMultiplier;
     }
 
-    public void updateScore(float scoreToAdd, float multiplier)
+    public void updateScore(float scoreToAdd, float multiplier=1)
     {
-        print("Score to add:" + scoreToAdd);
+
         // Calculate the score and multiplier.
-        this.actualScore += scoreToAdd;
-        this.actualScore *= multiplier;
+        this.actualScore += (scoreToAdd * multiplier);
 
         // Calculate an int value from the score.
         this.visibleScore = Mathf.FloorToInt(this.actualScore);
