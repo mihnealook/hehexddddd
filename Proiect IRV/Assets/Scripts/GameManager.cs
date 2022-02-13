@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         int temp = Mathf.FloorToInt(this.actualScore);
-        if (PlayerPrefs.GetInt("highscore") > temp) {
+        if (PlayerPrefs.GetInt("highscore") < temp) {
             PlayerPrefs.SetInt("highscore", temp);
         }
         terrainGameObject.transform.position = new Vector3(startingXTerrain - cowCurrentPosX, terrainGameObject.transform.position.y, 0);
