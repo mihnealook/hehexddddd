@@ -51,8 +51,8 @@ public class SlingshotControler : MonoBehaviour
     void Shoot()
     {
         Vector3 forceVec = (currPos - (middle.position + correction)) * force * -1;
-        cowRigidBody.velocity = forceVec;
-        cowRigidBody.useGravity = true;
+        cowRigidBody.velocity = new Vector3(forceVec.x, 0, 0);
+        cowRigidBody.useGravity = false;
         mainCamera.GetComponent<CameraFollower>().SetActive();
         cow.GetComponent<CaracterControler>().SetActive();
     }

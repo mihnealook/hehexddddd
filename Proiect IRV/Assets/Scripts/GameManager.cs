@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
 
     // The game object of the cow assigned from the inspector.
     public GameObject cowGameObject;
+    public GameObject terrainGameObject;
 
     // Used to invert the direction x (cow is moving towards -x);
     float POSITION_X_DIRECTION = -1.0f;
@@ -16,6 +18,10 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI scoreTextMesh;
 
     public TextMeshProUGUI PowerUpDoublePointsText;
+
+    public UnityEngine.UI.Text titleText;
+    public UnityEngine.UI.Button quitButton;
+    public UnityEngine.UI.Button resumeButton;
 
     // Actual score is a float to accurately keep track of the score.
     private float actualScore;
@@ -39,6 +45,8 @@ public class GameManager : MonoBehaviour
     // Used to get values from the character controller.
     private CaracterControler characterController;
 
+    private float startingXTerrain;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -51,7 +59,7 @@ public class GameManager : MonoBehaviour
         // Initialize the cow movement variables.
         this.cowPreviousPosX = getCowPositionX();
         this.cowCurrentPosX = getCowPositionX();
-
+        startingXTerrain = terrainGameObject.transform.position.x;
     }
 
     public void incrementMultiplier(float value)
@@ -69,7 +77,11 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        int temp = Mathf.FloorToInt(this.actualScore);
+        if (PlayerPrefs.GetInt("highscore") > temp) {
+            PlayerPrefs.SetInt("highscore", temp);
+        }
+        terrainGameObject.transform.position = new Vector3(startingXTerrain - cowCurrentPosX, terrainGameObject.transform.position.y, 0);
     }
 
     private void FixedUpdate()
@@ -107,11 +119,34 @@ public class GameManager : MonoBehaviour
         return this.scoreMultiplier;
     }
 
+    public void Pause() {
+        Time.timeScale = 0;
+        titleText.text = "Paused";
+        titleText.gameObject.SetActive(true);
+        quitButton.gameObject.SetActive(true);
+        resumeButton.gameObject.SetActive(true);
+    }
+
+    public void UnPause() {
+        Time.timeScale = 1;
+        titleText.gameObject.SetActive(false);
+        quitButton.gameObject.SetActive(false);
+        resumeButton.gameObject.SetActive(false);
+    }
+
+    public void GoToMainMenu() {
+        SceneManager.LoadScene("MainMenu");
+        Time.timeScale = 1;
+    }
+
     public void updateScore(float scoreToAdd, float multiplier=1)
     {
-
         // Calculate the score and multiplier.
         this.actualScore += (scoreToAdd * multiplier);
+
+        if (scoreToAdd * multiplier < 0) {
+            cowGameObject.GetComponent<CaracterControler>().lives--;
+        }
 
         // Calculate an int value from the score.
         this.visibleScore = Mathf.FloorToInt(this.actualScore);

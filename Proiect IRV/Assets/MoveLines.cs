@@ -20,6 +20,7 @@ public class MoveLines : MonoBehaviour
     private float initialZCoordinate;
 
     private float currentZCoordinate;
+    private bool started = false;
 
     private new Rigidbody rigidbody;
 
@@ -96,6 +97,7 @@ public class MoveLines : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.RightArrow) && TimeSinceLastLaneChange > TimeBetweenLaneChanges)
         {
+            started = true;
             nextLane = currentLane + 1;
             nextLane = Mathf.Clamp(nextLane, -HalfNumberOfLanes, HalfNumberOfLanes);
             transitionTime = 0.0f;
@@ -103,6 +105,7 @@ public class MoveLines : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.LeftArrow) && TimeSinceLastLaneChange > TimeBetweenLaneChanges)
         {
+            started = true;
             nextLane = currentLane - 1;
             nextLane = Mathf.Clamp(nextLane, -HalfNumberOfLanes, HalfNumberOfLanes);
             transitionTime = 0.0f;
@@ -114,8 +117,12 @@ public class MoveLines : MonoBehaviour
 
     void FixedUpdate()
     {
+        Debug.Log(currentZCoordinate);
         Vector3 currentPosition = rigidbody.position;
         currentPosition.z = currentZCoordinate;
-        rigidbody.MovePosition(currentPosition);
+        this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, currentZCoordinate);
+        if (transitionTime > 1 || !started) {
+            this.transform.rotation = new Quaternion(this.transform.rotation.x, this.transform.rotation.y, 0, this.transform.rotation.w);
+        }
     }
 }

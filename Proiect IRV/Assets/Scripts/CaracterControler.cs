@@ -10,6 +10,10 @@ public class CaracterControler : MonoBehaviour
     public GameManager gameManager;
 
     public float force;
+    public int lives = 5;
+    public UnityEngine.UI.Text livesText;
+    public UnityEngine.UI.Text titleText;
+    public UnityEngine.UI.Button quitButton;
 
     private bool isActive = false;
     private bool canJump = true;
@@ -68,6 +72,16 @@ public class CaracterControler : MonoBehaviour
             {
                 canJump = true;
             }
+
+            this.transform.position = new Vector3(this.transform.position.x, 6.5f, this.transform.position.z);
+        }
+        livesText.text = "Lives: " + lives.ToString();
+
+        if (lives <= 0) {
+            Time.timeScale = 0;
+            titleText.text = "You Lost";
+            titleText.gameObject.SetActive(true);
+            quitButton.gameObject.SetActive(true);
         }
     }
 }
